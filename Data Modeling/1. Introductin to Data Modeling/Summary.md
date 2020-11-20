@@ -127,3 +127,45 @@ ACID transaction은 데이터의 무결성을 보장한다.
 * 수평 확장이 필요한 경우
 
   relational database는 서버를 추가로 확장할 수 없다.
+
+---
+
+## NoSQL Databases
+ * 수평 확장이 간단하다.
+ * 가용성을 더 세밀하게 제어한다.
+  * NoSQL 과 SQL의 데이터 구조가 다르기 때문에 SQL Database 보다 일부 작업이 더 빠르다.
+
+#### Common Types of NoSQL Databases
+ * Apache Cassandra - Partition Row store      
+  데이터는 노드 또는 서버에서 분할로 분산되고, 열 및 행 형식으로 구성된다.
+ * MongDB - Document store             
+ 문서 지향 데이터베이스는 키-값 저장소에서 수행하는 키 조회 외에도 콘텐츠를 기반으로 문서를 검색하는 쿼리 언어이다.        
+기본적으로 문서 검색이 쉽다.
+* DynamoDB - Key-Value store        
+key-value store는 기본적으로 데이터가 key-value 형태로 표시된다.        
+* Apache HBase - Wide Column Store        
+Relational Dabase와 같ㅇ리 테이블, 행 및 열을 사용하지만 열의 이름과 형식은 동일한 테이블의 행마다 다를 수 있다. 때문에 유연한 스키마를 갖는다.        
+* Neo4J - Graph Database         
+ 그래프 데이터베이스는 엔티티 간의 관계에 더 중점을 두는 데이터베이스이다.        
+데이터는 노드와 간선으로 표현된다.
+
+#### Basics of Apache Cassandra
+
+![](./_image/2020-11-19-13-16-46.jpg)
+
+---
+## When to Use a NoSql Database
+ * 많은 데이터가 있을때
+ * 서버 확장이 필요할때
+ * 많은 데이터 처리가 필요 할때 (읽기/쓰기)
+ * 유연한 스키마가 필요할 때
+ * 높은 가용성이 필요할 때
+ * 다른 데이터 유형과 형식을 저장할 수 있어야 할 때
+ * 사용자가 분산되어 있고 사용에게 낮은 지연 시간을 유지해야 할 때
+
+## When to not use a NoSQL Database?
+* ACID Transactions이 필요할 때
+* JOINS 기능이 필할 때 (분산되어 있는 전체 서버에 접근하기 힘듬)
+* 집계 및 통계 기능이 필요할 때 (전체 테이블 조회하기 힘듬)
+* 데이터의 구조를 바꿀수도 있을때
+* 적은 데이터만 있을떄
