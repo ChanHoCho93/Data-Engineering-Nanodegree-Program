@@ -1,6 +1,6 @@
 ## Database
 
-떼이터베이스는 관련 데이터의 집합이며 구성 방식이다.
+데이터베이스는 관련 데이터의 집합이며 구성 방식이다.
 
 데이터에 대한 엑세스는 일반적으로 데이터베이스 관리 시스템에 의해 제공된다.
 
@@ -19,22 +19,24 @@
 * Simplicity (간단)
 * Intuitive Organization (직관적인 구성)
 
-### OLAP vs OLTP *
+### OLAP vs OLTP
 
 * OLAP (Online Analytical Processing):
 
-  데이터베이스 최적화를 통해 복잡한 분석 및 임시 쿼리가 가능하다.
-
-  읽기에 최적화되어 있다.
+    사용자의 의사결정에 도움이 되는 데이터들을 분석한다. OLAP는 단독으로 존재하는 정보 시스템이 아니며 데이터 웨어하우스나 데이터 마트 같은 시스템과 상호 연관 되며, 조회,계산,시계열 등 복잡한 모델링까지 다양한 각도에서 전략적인 정보로 변환시키는 역활을 한다.
 
 * OLTP(Online Transactional Processing):
 
-  대규모 볼륨에서 덜 복잡한 쿼리를 허용한다.
+  네트워크상의 여러 이용자가 실시간으로 데이터베이스의 데이터를 갱신하거나 조회하는 등의 단위 작업을 처리하는 방식을 말한다.
 
-### Structuring the Database: Normalization *
+### Structuring the Database: Normalization
 
 * Normalization:
 
-  데이터의 중복을 줄이고 데이터의 무결성을 높이기 위해 한다.
+  관계형 데이터베이스의 설계에서 데이터를 구조화 하는 프로세스를 말하며 데이터의 중복을 줄이고 데이터의 무결성을 높이기 위해 한다.
 
 * Denormalization: 
+
+  Normalization된 데이터베이스에서 성능을 개선하기 위해 사용되는 전략으로, 일부 쓰기 성능의 손실을 감수하고 데이터를 묶거나 데이터의 복제 사본을 추가함으로써 데이터베이스의 읽기 성능을 개선하려고 시도하는 과정이다.
+
+### Objectives of Normal Form
