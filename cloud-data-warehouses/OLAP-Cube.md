@@ -20,3 +20,11 @@
 
 ### Dice
 ![](./_image/2021-02-03-13-24-21.jpg)
+
+### Query Optimization
+
+![스크린샷 2021-02-13 오후 5.57.47](./_image/스크린샷 2021-02-13 오후 5.57.47.png)
+
+slice, dice, rollup, drill-drown을 사용하게 되면 많은 JOIN을 사용하게 된다.	
+
+그래서 `group by cube` 문을 사용하게 되면 가능한 모든 조합을 찾아서 보여주기 때문에 많은 JOIN문을 사용하는 operation보다 성능을 높힐수 있다.
