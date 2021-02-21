@@ -22,13 +22,13 @@ data sources에서 dimensional model로 넘어가는 과정입니다. 이 과정
 
 #### DWH
 
-![](./_image/스크린샷 2021-02-21 오후 5.13.25.png)
+![](./_image/2.png)
 
 DWH의 저장 과정입니다. ETL을 통해 가공된 데이터 소스들이 diensional model을 통해 저장 되게됩니다. dimensional model에 따라 olap-cube가 될 수 도 있고 다양한 workloads가 될 수 있습니다.
 
 #### BI
 
-![](./_image/스크린샷 2021-02-21 오후 5.27.22.png)
+![](./_image/3.png)
 
 마지막으로 BI-app 또는 visualization 하는 과정입니다. 이 과정을 하고난 후에 비니지스 유저들이 데이터를 통한 작업을 하게 됩니다. 
 
@@ -40,13 +40,13 @@ DWH의 개념적 모델을 살펴봤고 이제 DWH 구현 방법에 대해 알�
 
 #### On-Premise
 
-![](./_image/스크린샷 2021-02-21 오후 5.52.10.png)
+![](./_image/4.png)
 
 On-premise란 서버를 클라우드 같은 원격 환경에서 운영하는 방식이 아닌, 자체적으로 보유한 전산실 서버에 직접 설치해 운영하는 방식입니다. On-premise로 운영하게 되면 heterogeneity, scalability, elasticity등등 여러 고려 할점이 많이 필요합니다. 이런 고려는 개발자 입장에서 하게 되므로 여러 개발자들의 능력도 고려되야 합니다. 여러 개발자들, 서버 장비 등등 모든 자원은 돈이 필요하므로 돈이 가장 중요해 보입니다.
 
 #### Cloud
 
-![](./_image/스크린샷 2021-02-21 오후 6.00.26.png)
+![](./_image/5.png)
 
 Cloud 방식으로 가게되면 On-Premise에 비해 진입장벽이 낮고 사용자 의견에 따라 리소스 추가,제거가 간단합니다. 단점으론 클라우드 서버 운영 비용이 비싸고 Cloud라는 특성상 heterogeneity 문제를 항상 안고 가야하는데 동종 cloud를 사용하게 되면 설정 및 설치, 동일한 작동 등등 간단히 말해 쓰기가 쉽습니다. 하지만 해당 클라우드 업체와 디펜던시가 강해지므로 독립하기가 어려워 집니다. 
 
@@ -58,7 +58,7 @@ heterogeneity/complexity 자료는 [여기](https://www.bmc.com/blogs/homogeneou
 
 Cloud 방식으로 DWH를 구현하므로 AWS의 `Dimensioanl Model Storage `들을 살펴 보도록 하겠습니다.
 
-![](./_image/스크린샷 2021-02-21 오후 6.24.06.png)
+![](./_image/6.png)
 
 #### Cloud-Managed
 
