@@ -10,7 +10,7 @@
 
 #### Data Sources
 
-![](./_image/0.jpg)
+![](./_image/0.png)
 
 OLTP 환경에서 각각의  DB로 데이터가 넘어가는 과정입니다.  이 데이터들은 서로 다른 Operational Processes 들의 DB이기 때문에 높은 이질성(high heterogeneity)을 갖게 됩니다. 
 
