@@ -1,12 +1,13 @@
-# Data Warehouse On AWS
+# Amazon Redshift 
 
-- Conceptual model in data warehouse
-- Implementing DWH (Cloud vs On-Premise)
-- DWH Dimensional Model Storage on AWS
+- Amazon redshift technology
+- Amazon redshift architecture
 
-## Conceptual model in data warehouse
 
-`Amazone web service`에 들어가기 앞서 DWH의 개념적 모델을 살펴보도록 하겠습니다. 개념적 모델은 크게 `Data Sources`, `ETL`, `DWH`, `BI`  4가지로 구성됩니다. 구성을 자세히 살펴 보겠습니다.	
+
+## Amazon redshift technology
+
+`Amazone web service`에 들어가기 앞서 DWH의 개념적 모델을 살펴보도록 하겠습니다. 개념적 모델은 크게 Data Sources`, `ETL`, `DWH`, `BI  4가지로 구성됩니다. 구성을 자세히 살펴 보겠습니다.	
 
 #### Data Sources
 
