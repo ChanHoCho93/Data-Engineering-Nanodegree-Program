@@ -1,75 +1,46 @@
 # Amazon Redshift 
 
-- Amazon redshift technology
-- Amazon redshift architecture
+- Amazon Redshift Technology
+- Amazon Redshift Architecture
 
 
 
-## Amazon redshift technology
+Amazon의 Data Warehouse에 속해 있는 Redshift의 기본적인 `Technology, Architecture`에 관해 살펴보겠습니다.
 
-`Amazone web service`에 들어가기 앞서 DWH의 개념적 모델을 살펴보도록 하겠습니다. 개념적 모델은 크게 Data Sources`, `ETL`, `DWH`, `BI  4가지로 구성됩니다. 구성을 자세히 살펴 보겠습니다.	
+## Amazon Redshift Technology
 
-#### Data Sources
+![image-20210315152515729](_image\image-20210315152515729.png)
 
-![](./_image/0.png)
+데이터를 저장할때 크게 `Column oriented, Row oriented` 방식으로 나뉩니다. 간단히 말해 Row oriented는 디스크 블록에 행 단위로 저장이 되고 Column oriented는 열 단위로 저장이 됩니다. 이런 저장 방식 때문에 행 단위작업에는 Row oriented가 유리하고 열 단위 작업에는 Column oriented 방식이 유리합니다.
 
-OLTP 환경에서 각각의  DB로 데이터가 넘어가는 과정입니다.  이 데이터들은 서로 다른 Operational Processes 들의 DB이기 때문에 높은 이질성(high heterogeneity)을 갖게 됩니다. 
+Redshift는 `Column-oriented storage` 입니다. 열 단위로 저장되기 때문에 열 단위로 작업되는` OLAP` 환경에서 유리하고 오래된 Column이라도 한번에 Column 데이터를 불러오기 때문에 오래된 데이터에도 강점을 갖습니다. 또 한 `postgresql`을 사용하는데 이 부분은  추후에 설명하겠습니다.
 
-#### ETL
+![image-20210315152452776](_image\image-20210315152452776.png)
 
-![](./_image/1.png)
+Redshift는 `MPP(Massively Parallel Processing)`를 통해 쿼리를 처리합니다. MPP란 대용량 병렬 처리라는 뜻으로 쿼리에 맞는 테이블을 partition단위로 다수의 cpu에 분산시켜 병렬로 작업하는 방식입니다. MPP 방식을 사용함으로서 아무리 복잡한 쿼리라고 해도 빠른 속도로 실행, 처리할 수 있습니다.
 
-data sources에서 dimensional model로 넘어가는 과정입니다. 이 과정은 ETL 그리드, 그리드 머신이라고 불리는 머신이 데이터 복사를 위한 많은 schedules 와 pipeline process가 진행되게 됩니다.
+#### Amazon Redshift Architecture
 
-#### DWH
+![image-20210315160406043](_image\image-20210315160406043.png)
 
-![](./_image/2.png)
+다음으로 `Redshift Architecture`에 대해 보겠습니다. Redshift는 1개의 `Leader node`와 1개 이상의 `Compute node`로 구성되는 `Cluster` 입니다. Node들의 역활을 자세히 보겠습니다.
 
-DWH의 저장 과정입니다. ETL을 통해 가공된 데이터 소스들이 diensional model을 통해 저장 되게됩니다. dimensional model에 따라 olap-cube가 될 수 도 있고 다양한 workloads가 될 수 있습니다.
+![image-20210315161032246](_image\image-20210315161032246.png)
 
-#### BI
+Leader node의 역활은 `Communication, Coordinates` 2가지로 볼 수 있습니다.  JDBC, ODBC를 이용한 Client Applications들과 Leader node 간의 Communication,    그리고 Communication을 통해 받은 query를 Optimizes하여 compute node를 Coordinates 하는 것 입니다.  
 
-![](./_image/3.png)
+쉽게 말해 Communication이란 Leader node, App간의 통신,  Coordinates는 위에서 본 `MPP` 방식으로 처리 하는 것입니다. Leader node가  table, data를 patition하는 과정 자체가 query를 optimizes 한다고 볼 수 있습니다.
 
-마지막으로 BI-app 또는 visualization 하는 과정입니다. 이 과정을 하고난 후에 비니지스 유저들이 데이터를 통한 작업을 하게 됩니다. 
+![image-20210315162516411](_image\image-20210315162516411.png)
 
+Compute node는 Leader node에게 할당받은 작업을 처리하는 역활입니다. 각 Compute node들은 전용 cpu, memory, disk가 있으며 compute node들을 `Scale up, Scale out` 함으로서 Cluster의 성능, 용량을 늘릴수 있습니다.
 
+![image-20210315163329821](_image\image-20210315163329821.png)
 
-## Implementing DWH (Cloud vs On-Premise)
+마지막으로 Compute node들의 Slices에 대해 보겠습니다. Slices는 Compute node에서 할당받은 별도의 memory, disk를 가지며, Slice 갯수에 따라 n개의 파티션 만큼 작업을 할수 있습니다.
 
-DWH의 개념적 모델을 살펴봤고 이제 DWH 구현 방법에 대해 알아보겠습니다.  DWH 구현에는 기본적으로 `Cloud, On-Premise` 2가지 방법이 있습니다. 저희는 AWS를 통한 Cloud 방법으로 구현을 하겠지만 On-Premise의 특성도 알아두면 좋으므로 같이 알아보겠습니다.
+---
 
-#### On-Premise
+Amazon Redshift doc를 보시면 더 자세하고 정확한 설명을 볼수 있습니다.  [Amazon Redshift ](https://docs.aws.amazon.com/ko_kr/redshift/latest/dg/c_high_level_system_architecture.html)
 
-![](./_image/4.png)
-
-On-premise란 서버를 클라우드 같은 원격 환경에서 운영하는 방식이 아닌, 자체적으로 보유한 전산실 서버에 직접 설치해 운영하는 방식입니다. On-premise로 운영하게 되면 heterogeneity, scalability, elasticity등등 여러 고려 할점이 많이 필요합니다. 이런 고려는 개발자 입장에서 하게 되므로 여러 개발자들의 능력도 고려되야 합니다. 여러 개발자들, 서버 장비 등등 모든 자원은 돈이 필요하므로 돈이 가장 중요해 보입니다.
-
-#### Cloud
-
-![](./_image/5.png)
-
-Cloud 방식으로 가게되면 On-Premise에 비해 진입장벽이 낮고 사용자 의견에 따라 리소스 추가,제거가 간단합니다. 단점으론 클라우드 서버 운영 비용이 비싸고 Cloud라는 특성상 heterogeneity 문제를 항상 안고 가야하는데 동종 cloud를 사용하게 되면 설정 및 설치, 동일한 작동 등등 간단히 말해 쓰기가 쉽습니다. 하지만 해당 클라우드 업체와 디펜던시가 강해지므로 독립하기가 어려워 집니다. 
-
-heterogeneity/complexity 자료는 [여기](https://www.bmc.com/blogs/homogeneous-vs-heterogeneous-clouds/)를 더 참고하세요.
-
-
-
-## DWH Dimensional Model Storage on AWS
-
-Cloud 방식으로 DWH를 구현하므로 AWS의 `Dimensioanl Model Storage `들을 살펴 보도록 하겠습니다.
-
-![](./_image/6.png)
-
-#### Cloud-Managed
-
-- 전문가들의 기술을 재사용
-- 적은 직원들로 인한 장점(보안, 능력, 운영비용)
-- 복잡한 기술에 대한 모든 리소스를 스크립팅 할 수있는 코드 (Infrastructure)
-- 이미 존재하기 때문에 사용할 수 없는 기능이 존재할 수가 있음 (비슷한 기능은 존재하지만 세부 설정,지정등이 안될때)
-
-#### Self-Managed
-
-- EC2를 사용한 필요한 모든 기능 구현 가능
-- Cloud-Managed가 갖는 장점을 갖지 못함
 
