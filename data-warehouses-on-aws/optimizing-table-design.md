@@ -3,7 +3,7 @@
 - Distribution Styles
 - Sorting Key
 
-쿼리 속도올리기 위해 테이블 최적화 방법에 대해 알아보겠습니다. 
+쿼리 속도올리기 위해 테이블 최적화 방법에 대해 알아보겠습니다.  중요 쟁점은 `Shuffling` 이라고 불리는 테이블간의 참조를 어떻게 처리할 것인가 입니다.
 
 ## Distribution Styles
 
@@ -11,40 +11,34 @@ Distribution Styles에는 `EVEN, ALL, AUTO, KEY`  4가지 방식이 있습니다
 
 #### EVEN Distribution
 
+![image-20210419104919402](_image\image-20210419104919402.png)
+
+EVEN Distribution은 `Fact, Dimention Table`의 Row를 각 CPU에 `Load-Balancing` 합니다. 눈여겨 볼점은 Row를 순차적으로 Copy를 하는 것입니다.  이러한 방식은 Join이 많이 필요없는 테이블에  강점을 가지고, 반대로 Join이 많이 필요하게되면 테이블간의 참조가 많아지므로 Shuffling이 많이 발생하게 됩니다. 위 색깔 화살표처럼 Store를 참조하기 위한 Network Traffic이 많이 발생하고 있습니다.
+
+#### ALL Distribution
+
+![image-20210419110422799](_image\image-20210419110422799.png)
+
+ALL Distribution은 각 CPU에 Table 전체를 Copy하는 것입니다. 위 이미지에서 Fact Table은 EVEN, Dimention Table은 ALL Distribution 방식으로 진행을 하게 됨으로써 다른 테이블을 참조할 필요없이 로컬내에서 참조 가능하므로 Shuffling이 발생하지 않습니다. 이러한 방식이 저장소 낭비, 효율적이지 않을수 있지만, 보통 Dimention Table은 작기 때문에 큰 상관이 없고, Shuffling이 발생하는것보다 더 효율적이기 때문에 괜찮습니다.
+
+#### AUTO Distribution
+
+![image-20210419111048754](_image\image-20210419111048754.png)
+
+AUTO Distribution은 Redshift가 자동으로 관리해주는 방식입니다. Redshift 기준에서 Small Table은 ALL, Large Table는 EVEN 방식으로 관리하게 됩니다.
+
+#### KEY Distribution 
+
+![image-20210419112030281](_image\image-20210419112030281.png)
+
+KEY Distribution은 Fact Table의 Columms들중 하나를 선택하여 같은 값끼리 CPU에 Copy하는 방식입니다. 위 이미지에서 dimStore를 기준으로 CPU에 Copy되고 있습니다. ALL Distribution과 마찬가지로 Shuffling이 일어나지 않지만 ALL Distribution에서 Dimention Table을 Copy할때 Table이 너무 커서 문제가 생길경우 KEY Distribution이 좋은 대안이 될수 있습니다.
+
+## Sorting Key
+
+![image-20210419115049618](_image\image-20210419115049618.png)
+
+Sorting Key는 Columm하나를 Key로 지정하고 특정범위 만큼 CPU에 Copy하는 방식입니다. Shuffing이 발생하지 않으며 내부에 미리 정렬되어 있으므로 Query 성능이 좋아지게 됩니다.
 
 
-
-
-데이터를 저장할때 크게 `Column oriented, Row oriented` 방식으로 나뉩니다. 간단히 말해 Row oriented는 디스크 블록에 행 단위로 저장이 되고 Column oriented는 열 단위로 저장이 됩니다. 이런 저장 방식 때문에 행 단위작업에는 Row oriented가 유리하고 열 단위 작업에는 Column oriented 방식이 유리합니다.
-
-Redshift는 `Column-oriented storage` 입니다. 열 단위로 저장되기 때문에 열 단위로 작업되는` OLAP` 환경에서 유리하고 오래된 Column이라도 한번에 Column 데이터를 불러오기 때문에 오래된 데이터에도 강점을 갖습니다. 또 한 `postgresql`을 사용하는데 이 부분은  추후에 설명하겠습니다.
-
-![image-20210315152452776](_image\image-20210315152452776.png)
-
-Redshift는 `MPP(Massively Parallel Processing)`를 통해 쿼리를 처리합니다. MPP란 대용량 병렬 처리라는 뜻으로 쿼리에 맞는 테이블을 partition단위로 다수의 cpu에 분산시켜 병렬로 작업하는 방식입니다. MPP 방식을 사용함으로서 아무리 복잡한 쿼리라고 해도 빠른 속도로 실행, 처리할 수 있습니다.
-
-#### Amazon Redshift Architecture
-
-![image-20210315160406043](_image\image-20210315160406043.png)
-
-다음으로 `Redshift Architecture`에 대해 보겠습니다. Redshift는 1개의 `Leader node`와 1개 이상의 `Compute node`로 구성되는 `Cluster` 입니다. Node들의 역활을 자세히 보겠습니다.
-
-![image-20210315161032246](_image\image-20210315161032246.png)
-
-Leader node의 역활은 `Communication, Coordinates` 2가지로 볼 수 있습니다.  JDBC, ODBC를 이용한 Client Applications들과 Leader node 간의 Communication,    그리고 Communication을 통해 받은 query를 Optimizes하여 compute node를 Coordinates 하는 것 입니다.  
-
-쉽게 말해 Communication이란 Leader node, App간의 통신,  Coordinates는 위에서 본 `MPP` 방식으로 처리 하는 것입니다. Leader node가  table, data를 patition하는 과정 자체가 query를 optimizes 한다고 볼 수 있습니다.
-
-![image-20210315162516411](_image\image-20210315162516411.png)
-
-Compute node는 Leader node에게 할당받은 작업을 처리하는 역활입니다. 각 Compute node들은 전용 cpu, memory, disk가 있으며 compute node들을 `Scale up, Scale out` 함으로서 Cluster의 성능, 용량을 늘릴수 있습니다.
-
-![image-20210315163329821](_image\image-20210315163329821.png)
-
-마지막으로 Compute node들의 Slices에 대해 보겠습니다. Slices는 Compute node에서 할당받은 별도의 memory, disk를 가지며, Slice 갯수에 따라 n개의 파티션 만큼 작업을 할수 있습니다.
-
----
-
-Amazon Redshift doc를 보시면 더 자세하고 정확한 설명을 볼수 있습니다.  [Amazon Redshift ](https://docs.aws.amazon.com/ko_kr/redshift/latest/dg/c_high_level_system_architecture.html)
 
 
