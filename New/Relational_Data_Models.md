@@ -39,6 +39,58 @@
 >* **OLAP** (On-line Analytical Processing)는 기록 데이터 또는 보관 데이터를 처리합니다. OLAP는 거래량이 상대적으로 적은 것이 특징입니다. 쿼리는 종종 매우 복잡하고 집계를 포함합니다. OLAP 시스템의 경우 응답 시간은 효율성 척도입니다. OLAP 응용 프로그램은 데이터 마이닝 기술에서 널리 사용됩니다. OLAP 데이터베이스에는 다차원 스키마(일반적으로 스타 스키마)에 저장된 집계된 기록 데이터가 있습니다. 때때로 쿼리는 작년에 회사의 이익이 무엇인지와 같은 관리 레코드의 많은 양의 데이터에 액세스해야 합니다.
 >* OLAP와 OLTP의 차이점을 기억하는 핵심은 분석(A) 대 트랜잭션(T)입니다. 신발 가격을 확인하려면 OLTP를 사용하고 있는 것입니다(집계가 거의 없거나 전혀 없음). 특정 매장에서 판매한 신발의 총 재고를 알고 싶다면 OLAP를 사용해야 합니다(집계가 필요하기 때문).
 >
+
+
+
+>Normalization and Denormalization
+>
+>* Normalization: To reduce data redundancy and increase data integrity.
+>* Denormalization: Must be done in read heavy workloads to increase performance.
+
+
+
+>Objectives of Normal Form
+>
+>* To free the database from unwanted insertions, updates, & deletion dependencies
+>* To reduce the need for refactoring the database as new types of data are introduced
+>* To make the relational model more informative to users
+>* To make the database neutral to the query statistics
+
+
+
+>Normal Forms
+>
+>* 1NF
+>
+>  * Atomic values: each cell contains unique and single values
+>
+>  * Be able to add data without altering tables
+>
+>  * Separate different relations into different tables
+>
+>  * Keep relationships between tables together with foreign keys
+>
+>* 2NF
+>
+>  * All columns in the table must rely on the Primary Key
+>
+>* 3NF
+>
+>  * No transitive dependencies, Remember, transitive dependencies you are trying to maintain is that to get from A-> C, you want to avoid going through B.
+>
+
+
+
+>Denormalization
+>
+>* The Designer is incharge of keeping data consistent
+>* Reads will be faster (select)
+>* Writes will be slower (insert, update, delete)
+>
+>
+>
+>
+>
 >
 >
 >
