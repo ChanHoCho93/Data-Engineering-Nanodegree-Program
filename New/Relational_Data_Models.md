@@ -87,10 +87,60 @@
 >* Reads will be faster (select)
 >* Writes will be slower (insert, update, delete)
 >
+
+
+
+>Fact and Demention Table
 >
+>* Fact Table : 사실을 중점으로 둔 테이블 정보, Demention Table들의 외래키를 가지고 있다.
+>* Demention Table: Fact Table을 제외한 나머지 정보.
+
+
+
+>Star Schema
 >
+>* 가장 단순한 스타일의 데이터 마트 스키마
 >
+>* 별 모양으로서, 팩트 테이블이 그 중심에 있다.
 >
+>Benefits
 >
+>* Denormalized : 비정규화 상태임
+>* Simplifies queries : 비정규화 상태라 쿼리가 단순해짐
+>* Fast aggregations : 비정규화 상태라 쿼리가 집계가 빠름
 >
+>Drawbacks
 >
+>* Issues that come with denormailzation: 비정규화 상태라 이슈 발생 가능
+>* Data Integrity: 비정규화 상태 데이터가 분산되어 있어서 무결성 이슈 생길수 있음
+>* Decrease query Flexibility: 비정규화 상태라 유연성 떨어짐
+>* Many to many Relationship -- simplified: 모델에 맞추기 위해 추상화 하다보니까 다대다 관계가 생길수 있음
+
+
+
+>Snowflake schema
+>
+>* 스타 스키마에서 Demention에 새로운 Demention이 달리면서 자식 형태로 레벨이 형성되는 테이블
+>* 1:N 관계를 허용하지 않음
+>* Snowflake는 Star 보다 더 정규화 되어있음 1NF or 2NF
+>
+
+
+
+>#### What we learned:
+>
+>- What makes a database a relational database and Codd’s 12 rules of relational database design
+>- The difference between different types of workloads for databases OLAP and OLTP
+>- The process of database normalization and the normal forms.
+>- Denormalization and when it should be used.
+>- Fact vs dimension tables as a concept and how to apply that to our data modeling
+>- How the star and snowflake schemas use the concepts of fact and dimension tables to make getting value out of the data easier.
+>
+>#### 우리가 배운 것:
+>
+>- 데이터베이스를 관계형 데이터베이스로 만드는 요소와 Codd의 관계형 데이터베이스 디자인에 대한 12가지 규칙
+>- 데이터베이스 OLAP 및 OLTP에 대한 서로 다른 워크로드 유형 간의 차이점
+>- 데이터베이스 정규화 과정과 정규형.
+>- 비정규화 및 사용 시기.
+>- 개념으로서의 팩트 대 차원 테이블 및 이를 데이터 모델링에 적용하는 방법
+>- 스타 및 눈송이 스키마가 팩트 및 차원 테이블의 개념을 사용하여 데이터에서 더 쉽게 가치를 얻는 방법.
