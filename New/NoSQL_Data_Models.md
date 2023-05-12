@@ -60,23 +60,35 @@
 
 
 
+>Primary Key
 >
+>* Must be unique
+>* Primary Key는 Partition Key로만 구성되거나 Clustering Columns를 포함할 수 있다.
+>* 단순 Primary Key는 Partition Key이기도 한 하나의 열이다. 복합 Primary Key는 둘 이상의 열로 구성되며 고유의 값 생성 및 검색 쿼리에 도움이 된다.
+>* Partition Key는 시스템 전체의 데이터 분포를 결정한다.
+
+
+
+>Clustering Column
 >
+>* 클러스터링 열은 정렬된 오름차순으로 데이터를 정렬함
+>* 둘 이상의 클러스터링 열을 추가할 수 있음
 >
->
->
->
->
->
->
->
->
->
->
->
->
->
+>![image-20230413104857619](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20230413104857619.png)
 >
 
+>WHERE Clause
+>
+>* Apache Cassandra의 데이터 모델링은 쿼리 중심이며 WHERE절에 초점을 맞춰야 합니다.
+
+
+
+>What we covered in this lesson:
+>
+>* Basics of Distributed Database Design
+>* Must Know your queries and model the tables to your queries (쿼리 중심 모델링)
+>* Importance of Denormalization
+>* Primary Key, Partition Key, and Clustering Column
+>* The WHERE clause
 
 
